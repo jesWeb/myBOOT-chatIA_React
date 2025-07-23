@@ -1,15 +1,16 @@
 
 import { Route, Routes } from 'react-router-dom'
-import './App.css'
+import './index.css'
+import MainVentanaChat from './components/MainVentanaChat'
 
 function App() {
 
 
   return (
     <>
-      <div className="">
+      <div className='min-h-screen bg-zinc-900 text-white' >
         <Routes>
-          <Route />
+          <Route path='/' element={<MainVentanaChat />} />
         </Routes>
       </div>
     </>
