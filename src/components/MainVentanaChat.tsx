@@ -45,6 +45,7 @@ const MainVentanaChat = () => {
                 <form action="" onSubmit={handleSubmit(onsubmit)} className="flex gap-3">
                     <input
                         {...register("texto")}
+                        placeholder="Escribe tu consulta..."
                         type="text"
                         className="flex-1 px-4.5 rounded-lg bg-zinc-800 text-white placeholder-gray-400"
                     />
