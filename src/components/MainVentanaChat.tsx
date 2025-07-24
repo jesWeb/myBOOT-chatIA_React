@@ -1,7 +1,10 @@
 import { useForm } from "react-hook-form"
-import { minLength, object, pipe, string } from "valibot"
+import { minLength, object, pipe, promise, string } from "valibot"
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import { useChatStore } from "../store/useChartStore";
+import { data } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { consultorIA } from "../lib/consultarIA";
 
 
 //esquema de validacion con valibot
@@ -17,6 +20,7 @@ type Fromulario = { texto: string }
 const MainVentanaChat = () => {
 
     const mensajes = useChatStore((state) => state.mensajes)
+    const agregarMensaje = useChatStore((state) => state.agregarMensaje)
 
     //react-hook-Forms
     const {
@@ -29,10 +33,51 @@ const MainVentanaChat = () => {
     })
 
 
-    const onsubmit = (data: Fromulario) => {
-        console.log("Mensaje esta validado", data);
-        reset()
+    const [cargando, setCargando] = useState(false)
+
+    const SimulaRespuesta = async (texto: string): Promise<string> => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve(`(respuesta simulada) entendi el mensaje : "${texto}"`)
+            }, 800)
+        })
+
     }
+
+
+    const manejarEnvio = async (entrada: string) => {
+
+        agregarMensaje({
+            id: Date.now(),
+            rol: "usuario",
+            texto: entrada
+        })
+
+        setCargando(true)
+
+        try {
+            const response = await SimulaRespuesta(entrada)
+            agregarMensaje({
+                id: Date.now() + 1,
+                rol: "usuario",
+                texto: response
+            })
+
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setCargando(false)
+        }
+
+    }
+
+
+    useEffect(() => {
+        consultorIA().then((respuesta) => {
+            console.log("Respuesta de la IA", respuesta);
+
+        })
+    }, [])
 
     return (
         <div className="flex flex-col h-screen bg-zinc-900 text-white">
@@ -50,13 +95,18 @@ const MainVentanaChat = () => {
                     </div>
                 ))}
 
-                <div className="">
-
-                </div>
+                {cargando && (
+                    <div className="italic text-gray-400">
+                        El boot esta escribiendo ...
+                    </div>
+                )}
             </main>
 
             <footer className="px-4 py-3 border-t border-zinc-700 space-y-4">
-                <form action="" onSubmit={handleSubmit(onsubmit)} className="flex gap-3">
+                <form action="" onSubmit={handleSubmit((data) => {
+                    manejarEnvio(data.texto)
+                    reset()
+                })} className="flex gap-3">
                     <input
                         {...register("texto")}
                         placeholder="Escribe tu consulta..."
