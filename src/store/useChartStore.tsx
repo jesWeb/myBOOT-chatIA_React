@@ -7,6 +7,7 @@ type EstadoChat = {
 }
 
 export const useChatStore = create<EstadoChat>((set) => ({
+    //mensaje inicial del chat 
     mensajes: [
         {
             id: 1,
