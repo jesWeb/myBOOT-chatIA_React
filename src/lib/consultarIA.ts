@@ -3,7 +3,7 @@ import axios from "axios"
 
 const API_KEY = import.meta.env.VITE_GROQ_API_KEY
 
-export const consultorIA = async (): Promise<string> => {
+export const consultorIA = async ({ soloUsuario, incluirHistorial }: { soloUsuario: string, incluirHistorial: boolean }): Promise<string> => {
 
     const sistema = {
         role: "system",
@@ -16,7 +16,9 @@ export const consultorIA = async (): Promise<string> => {
     }
 
 
-    const mensajes = [sistema, usuario]
+    const mensajes = incluirHistorial ? [sistema, { role: "user", content: soloUsuario }] : [{ role: "user", content: soloUsuario }]
+
+    // const mensajes = [sistema, usuario]
 
     try {
         const response = await axios.post(

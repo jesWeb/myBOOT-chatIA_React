@@ -2,9 +2,9 @@ import { useForm } from "react-hook-form"
 import { minLength, object, pipe, promise, string } from "valibot"
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import { useChatStore } from "../store/useChartStore";
-import { data } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { consultorIA } from "../lib/consultarIA";
+
 
 
 //esquema de validacion con valibot
@@ -35,14 +35,14 @@ const MainVentanaChat = () => {
 
     const [cargando, setCargando] = useState(false)
 
-    const SimulaRespuesta = async (texto: string): Promise<string> => {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve(`(respuesta simulada) entendi el mensaje : "${texto}"`)
-            }, 800)
-        })
+    // const SimulaRespuesta = async (texto: string): Promise<string> => {
+    //     return new Promise((resolve) => {
+    //         setTimeout(() => {
+    //             resolve(`(respuesta simulada) entendi el mensaje : "${texto}"`)
+    //         }, 800)
+    //     })
 
-    }
+    // }
 
 
     const manejarEnvio = async (entrada: string) => {
@@ -56,7 +56,10 @@ const MainVentanaChat = () => {
         setCargando(true)
 
         try {
-            const response = await SimulaRespuesta(entrada)
+            const response = await consultorIA({
+                soloUsuario: entrada,
+                incluirHistorial: true
+            })
             agregarMensaje({
                 id: Date.now() + 1,
                 rol: "usuario",
@@ -72,12 +75,12 @@ const MainVentanaChat = () => {
     }
 
 
-    useEffect(() => {
-        consultorIA().then((respuesta) => {
-            console.log("Respuesta de la IA", respuesta);
+    // useEffect(() => {
+    //     consultorIA().then((respuesta) => {
+    //         console.log("Respuesta de la IA", respuesta);
 
-        })
-    }, [])
+    //     })
+    // }, [])
 
     return (
         <div className="flex flex-col h-screen bg-zinc-900 text-white">
