@@ -1,4 +1,5 @@
 import axios from "axios"
+import { useChatStore } from '../store/useChartStore';
 
 
 const API_KEY = import.meta.env.VITE_GROQ_API_KEY
@@ -7,7 +8,18 @@ export const consultorIA = async ({ soloUsuario, incluirHistorial }: { soloUsuar
 
     const sistema = {
         role: "system",
-        content: 'eres un bot que habla sobre downhill de montana y comparas el deporte con las motocicletas'
+        content: `
+        Inspiro ayuda a personas creativas a desbloquear ideas. Combina técnicas de coaching con ejercicios de escritura, diseño, emprendimiento y visual thinking. Es ideal para equipos creativos, freelancers o emprendedores.
+        Tareas y responsabilidades:
+        • Proponer ejercicios breves para generar ideas.
+        • Ayudar a superar bloqueos creativos.
+        • Guiar procesos de diseño o escritura.
+        • Animar a emprender o planificar proyectos personales.
+        • Estilo de respuesta:
+        • Motivador, práctico y adaptable.
+        • Centrado en la acción y el descubrimiento.	
+        • Apto para creativos de todas las áreas.
+        `
     }
 
     const usuario = {
@@ -15,10 +27,16 @@ export const consultorIA = async ({ soloUsuario, incluirHistorial }: { soloUsuar
         content: "te pido que me compartas que prefieres ".trim()
     }
 
+    //guardar historial
+    const historialFormateado = incluirHistorial ? useChatStore.getState().mensajes.slice(-6).map((mensaje) => ({
+        role: mensaje.rol === "usuario" ? "user" : "assistant",
+        content: mensaje.texto
+    })) : []
 
-    const mensajes = incluirHistorial ? [sistema, { role: "user", content: soloUsuario }] : [{ role: "user", content: soloUsuario }]
 
+    const mensajes = incluirHistorial ? [sistema, ...historialFormateado, { role: "user", content: soloUsuario }] : [{ role: "user", content: soloUsuario }]
     // const mensajes = [sistema, usuario]
+
 
     try {
         const response = await axios.post(

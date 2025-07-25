@@ -19,7 +19,7 @@ type Fromulario = { texto: string }
 
 const MainVentanaChat = () => {
 
-    const mensajes = useChatStore((state) => state.mensajes)
+    const mensaje = useChatStore((state) => state.mensajes)
     const agregarMensaje = useChatStore((state) => state.agregarMensaje)
 
     //react-hook-Forms
@@ -90,11 +90,11 @@ const MainVentanaChat = () => {
             </header>
 
             <main className="flex-1 px-4 py-6 overflow-y-auto space-y-4">
-                {mensajes.map((mensaje) => (
-                    <div key={mensaje.id}
-                        className={`max-w-md px-4 py-2 rounded-xl shadow ${mensaje.rol === "usuario" ? "bg-zinc-500 self-end" : "bg-zinc-700  self-start"}`}
+                {mensaje.map((mensa) => (
+                    <div key={mensa.id}
+                        className={`max-w-md px-4 py-2 rounded-xl shadow ${mensa.rol === "usuario" ? "bg-zinc-500 self-end" : "bg-zinc-700  self-start"}`}
                     >
-                        {mensaje.texto}
+                        {mensa.texto}
                     </div>
                 ))}
 
