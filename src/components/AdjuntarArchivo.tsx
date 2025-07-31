@@ -1,4 +1,57 @@
+/**
+ * user selecciona un archivo 
+ *  valida  + extraer el texto
+ *  vista previa 
+ *          no -> Borrar el texto 
+ *          si -> Se envia la info al chat
+ * 
+ */
+import { useState } from "react"
+
+const EXTENSIONES_MIME_VALIDAS = [
+    "application/pdf",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "text/plain",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+
+]
+
+const tamano = 5 * 1024 * 1024
+
 export default function AdjuntarArchivo() {
+
+    const [Texto, setTexto] = useState("")
+
+    const EXTEN_VALIDAS = ["pdf", "docx", "txt", "xlsx"]
+
+    const manejarArchivo = async (e: React.ChangeEvent<HTMLInputElement>) => {
+
+        const archivo = e.target.files?.[0]
+        if (!archivo) return
+
+        const extension = archivo.name.split('.').pop()?.toLocaleLowerCase()
+
+        if (!extension || !EXTEN_VALIDAS.includes(extension)) {
+            alert("Formato no permitido")
+            return
+        }
+
+        if (!EXTENSIONES_MIME_VALIDAS.includes(archivo.type)) {
+            alert("Tipo de mime no permitido")
+            return
+        }
+
+        if (archivo.size > tamano) {
+            alert("El archivoo excede el tamano maximo permitido")
+            return
+        }
+
+    }
+
+
+
+
+
     return (
         <div className="mt-4 space-y-2">
 
@@ -8,36 +61,32 @@ export default function AdjuntarArchivo() {
                     accept=".txt, .pdf, .docx "
                     type="file"
                     className="hidden"
+                    onChange={manejarArchivo}
                 />
             </label>
 
+            {Texto && (
 
-            <div className="text-sm bg-zing-800 p-3 rounded text-center">
-                <p className="mb-2">
-                    Quieres analizar este Archivo?
-                </p>
+                <div className="text-sm bg-zing-800 p-3 rounded text-center">
+                    <p className="mb-2">
+                        Quieres analizar este Archivo?
+                    </p>
 
-                <div className="flex justify-center gap-2">
-                    <button
-                        className="bg-blue-500 px-3 py-1 rounded hover:bg-blue-600"
-                    >
-                        Si
-                    </button>
+                    <div className="flex justify-center gap-2">
+                        <button
+                            className="bg-blue-500 px-3 py-1 rounded hover:bg-blue-600"
+                        >
+                            Si
+                        </button>
 
-                    <button
-                        className="bg-amber-700 px-3 py-1 rounded hover:bg-amber-800"
-                    >
-                        No
-                    </button>
-
-
-
-
+                        <button
+                            className="bg-amber-700 px-3 py-1 rounded hover:bg-amber-800"
+                        >
+                            No
+                        </button>
+                    </div>
                 </div>
-
-
-
-            </div>
+            )}
 
 
 
