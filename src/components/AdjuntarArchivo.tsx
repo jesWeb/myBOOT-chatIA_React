@@ -21,11 +21,11 @@ const tamano = 5 * 1024 * 1024
 export default function AdjuntarArchivo() {
 
     const [Texto, setTexto] = useState("")
-
+    const lecturaSize = 5000;
     const EXTEN_VALIDAS = ["pdf", "docx", "txt", "xlsx"]
-
+    //evento de archivo
     const manejarArchivo = async (e: React.ChangeEvent<HTMLInputElement>) => {
-
+        //validaciones generales archivo 
         const archivo = e.target.files?.[0]
         if (!archivo) return
 
@@ -46,10 +46,36 @@ export default function AdjuntarArchivo() {
             return
         }
 
+
+
+        // procesar archivo  por su tipo
+
+
+        //txt
+        if (extension === "txt") {
+            const lector = new FileReader()
+            lector.onload = () => {
+                const contenido = (lector.result as string).slice(0, lecturaSize)
+                setTexto(contenido)
+            }
+            lector.readAsText(archivo)
+            return
+        }
+
+
+
+
     }
 
 
-
+    //funcion para confirmar 
+    const confirmar = () => {
+        setTexto("")
+    }
+    //funcion para cancelar
+    const cancelar = () => {
+        setTexto("")
+    }
 
 
     return (
@@ -74,12 +100,14 @@ export default function AdjuntarArchivo() {
 
                     <div className="flex justify-center gap-2">
                         <button
+                            onClick={confirmar}
                             className="bg-blue-500 px-3 py-1 rounded hover:bg-blue-600"
                         >
                             Si
                         </button>
 
                         <button
+                            onClick={cancelar}
                             className="bg-amber-700 px-3 py-1 rounded hover:bg-amber-800"
                         >
                             No
