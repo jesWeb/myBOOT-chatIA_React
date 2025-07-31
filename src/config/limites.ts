@@ -1,0 +1,1 @@
+export const LIMITE_TEXTO = 1000

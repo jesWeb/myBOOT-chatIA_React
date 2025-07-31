@@ -5,6 +5,7 @@ import { useChatStore } from "../store/useChartStore";
 import { useEffect, useRef, useState } from "react";
 import { consultorIA } from "../lib/consultarIA";
 import AdjuntarArchivo from "./AdjuntarArchivo";
+import { LIMITE_TEXTO } from "../config/limites";
 
 
 
@@ -46,20 +47,30 @@ const MainVentanaChat = () => {
     // }
 
 
-    const manejarEnvio = async (entrada: string) => {
+    const manejarEnvio = async (entrada: string | { Texto: string; esArchivo?: boolean }
+    ) => {
+
+        //creamos un ternario para definir si el texto que se pasa al modelo de ia es del user o archivo 
+        const texto = typeof entrada === "string" ? entrada : entrada.Texto
+
+        //comprobar si la entrada es un objeto y si viene marcada como archivo 
+
+        const esArchivo = typeof entrada === "object" && entrada.esArchivo
+
 
         agregarMensaje({
             id: Date.now(),
             rol: "usuario",
-            texto: entrada
+            // texto: entrada
+            texto
         })
 
         setCargando(true)
 
         try {
             const response = await consultorIA({
-                soloUsuario: entrada,
-                incluirHistorial: true
+                soloUsuario: texto.slice(0,LIMITE_TEXTO),
+                incluirHistorial: !esArchivo
             })
             agregarMensaje({
                 id: Date.now() + 1,
@@ -132,7 +143,7 @@ const MainVentanaChat = () => {
                 </form>
                 {errors.texto && (
                     <p className=" bg-red-500 text-white-500 text-sm">{errors.texto.message}</p>)}
-                <AdjuntarArchivo />
+                <AdjuntarArchivo envioTextoExtraido={manejarEnvio} />
             </footer>
 
 

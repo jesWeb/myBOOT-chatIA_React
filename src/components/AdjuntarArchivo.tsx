@@ -7,6 +7,7 @@
  * 
  */
 import { useState } from "react"
+import { LIMITE_TEXTO } from "../config/limites"
 
 const EXTENSIONES_MIME_VALIDAS = [
     "application/pdf",
@@ -16,9 +17,18 @@ const EXTENSIONES_MIME_VALIDAS = [
 
 ]
 
-const tamano = 5 * 1024 * 1024
+// const tamano = 5 * 1024 * 1024
 
-export default function AdjuntarArchivo() {
+type PropAjuntarArchivo = {
+    envioTextoExtraido: (
+        entrada: {
+            Texto: string
+            esArchivo: boolean
+        }
+    ) => void
+}
+
+export default function AdjuntarArchivo({ envioTextoExtraido }: PropAjuntarArchivo) {
 
     const [Texto, setTexto] = useState("")
     const lecturaSize = 5000;
@@ -41,7 +51,7 @@ export default function AdjuntarArchivo() {
             return
         }
 
-        if (archivo.size > tamano) {
+        if (archivo.size > LIMITE_TEXTO) {
             alert("El archivoo excede el tamano maximo permitido")
             return
         }
@@ -70,6 +80,10 @@ export default function AdjuntarArchivo() {
 
     //funcion para confirmar 
     const confirmar = () => {
+        envioTextoExtraido({
+            esArchivo: true,
+            Texto
+        })
         setTexto("")
     }
     //funcion para cancelar
