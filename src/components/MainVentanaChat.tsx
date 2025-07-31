@@ -69,17 +69,22 @@ const MainVentanaChat = () => {
 
         try {
             const response = await consultorIA({
-                soloUsuario: texto.slice(0,LIMITE_TEXTO),
+                soloUsuario: texto.slice(0, LIMITE_TEXTO),
                 incluirHistorial: !esArchivo
             })
             agregarMensaje({
                 id: Date.now() + 1,
-                rol: "usuario",
+                rol: "bot",
                 texto: response
             })
 
         } catch (error) {
             console.error(error)
+            agregarMensaje({
+                id: Date.now() + 2,
+                rol: "bot",
+                texto: "Ocurrio u error al analizar el archivo"
+            })
         } finally {
             setCargando(false)
         }

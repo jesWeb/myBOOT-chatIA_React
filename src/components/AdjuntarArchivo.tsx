@@ -8,6 +8,7 @@
  */
 import { useState } from "react"
 import { LIMITE_TEXTO } from "../config/limites"
+import { leerDocs } from "../utils/leerDocs"
 
 const EXTENSIONES_MIME_VALIDAS = [
     "application/pdf",
@@ -56,11 +57,7 @@ export default function AdjuntarArchivo({ envioTextoExtraido }: PropAjuntarArchi
             return
         }
 
-
-
         // procesar archivo  por su tipo
-
-
         //txt
         if (extension === "txt") {
             const lector = new FileReader()
@@ -72,6 +69,20 @@ export default function AdjuntarArchivo({ envioTextoExtraido }: PropAjuntarArchi
             return
         }
 
+        //DOCX
+        if (extension === "docx") {
+            //nuevo archivo
+            const lector = new FileReader()
+            //como vamos a procesar el arch y por donde , como se tiene que leer el archivo 
+            // nos deviuleve el contenido crudo y ya estamos listos para procesar el contemnido y enviarlo a index Ventana chat a travez de settexto
+            lector.onload = async () => {
+                const resultado = await leerDocs(archivo)
+                setTexto(resultado)
+            }
+            //leemos el archivo a las especificaciones que nos indiquen en el lectoer onload
+            lector.readAsArrayBuffer(archivo)
+            return
+        }
 
 
 
