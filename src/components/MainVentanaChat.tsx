@@ -4,6 +4,7 @@ import { valibotResolver } from "@hookform/resolvers/valibot";
 import { useChatStore } from "../store/useChartStore";
 import { useEffect, useRef, useState } from "react";
 import { consultorIA } from "../lib/consultarIA";
+import AdjuntarArchivo from "./AdjuntarArchivo";
 
 
 
@@ -131,6 +132,7 @@ const MainVentanaChat = () => {
                 </form>
                 {errors.texto && (
                     <p className=" bg-red-500 text-white-500 text-sm">{errors.texto.message}</p>)}
+                <AdjuntarArchivo />
             </footer>
 
 
