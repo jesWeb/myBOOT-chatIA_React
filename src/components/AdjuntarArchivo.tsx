@@ -9,6 +9,7 @@
 import { useState } from "react"
 import { LIMITE_TEXTO } from "../config/limites"
 import { leerDocs } from "../utils/leerDocs"
+import { leerPdf } from "../utils/Leerpdf"
 
 const EXTENSIONES_MIME_VALIDAS = [
     "application/pdf",
@@ -83,6 +84,16 @@ export default function AdjuntarArchivo({ envioTextoExtraido }: PropAjuntarArchi
             lector.readAsArrayBuffer(archivo)
             return
         }
+
+        //pdf 
+
+        if (extension === "pdf") {
+            const resultado = await leerPdf(archivo)
+            setTexto(resultado)
+            return
+        }
+
+
 
 
 
