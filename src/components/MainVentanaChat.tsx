@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { consultorIA } from "../lib/consultarIA";
 import AdjuntarArchivo from "./AdjuntarArchivo";
 import { LIMITE_TEXTO } from "../config/limites";
+import { useLocation, Link } from "react-router-dom";
 
 
 
@@ -23,6 +24,11 @@ const MainVentanaChat = () => {
 
     const mensaje = useChatStore((state) => state.mensajes)
     const agregarMensaje = useChatStore((state) => state.agregarMensaje)
+
+    //En que ruta estamos 
+    const location = useLocation()
+    const enDocumentos = location.pathname === "/documentos"
+
 
     //react-hook-Forms
     const {
@@ -102,6 +108,13 @@ const MainVentanaChat = () => {
 
             <header className="bg-zinc-800 px-4 py-3 flex justify-between items-center shadow-md">
                 <h1 className="text-xl font-semibold">ARES IA</h1>
+                {/* Usar el componente Link de react-router-dom */}
+                <Link
+                    to={enDocumentos ? "/" : "/documentos"}
+                    className="text-sm text-white bg-zinc-700 hover:bg-zinc-600 px-3 py-1 rounded"
+                >
+                    {enDocumentos ? "Volver al chat" : "Ver Documentos"}
+                </Link>
             </header>
 
             <main className="flex-1 flex justify-center px-4 py-6 overflow-y-auto">
@@ -112,7 +125,7 @@ const MainVentanaChat = () => {
                             className={`flex ${mensa.rol === "usuario" ? "justify-end" : "justify-center"}`}
                         >
                             <div className={
-                                `w-fit max-w-[90%] px-4 py-2 rounded-xl shadow
+                                `w-fit max-w-[90%] px-4 py-2 rounded-xl shadow whitespace-pre-wrap
                                  ${mensa.rol === "usuario" ? "bg-zinc-500 self-end" : "bg-zinc-700  self-start"}`}>
                                 {mensa.texto}
                             </div>
