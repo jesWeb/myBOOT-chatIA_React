@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import type { Tipo } from '../types/documento'
-import {saveAs} from 'file-saver'
+import { saveAs } from 'file-saver'
+import { generarPdf } from '../utils/generarPdf'
 
 type PropMenuDescarga = {
     contenido: string
@@ -12,14 +13,34 @@ export default function MenuDescargaMensajes({ contenido }: PropMenuDescarga) {
 
     const [abierto, setAbierto] = useState(false)
 
-    const titulo = contenido.slice(0,40).replace(/\s+/g, "_")
+    const titulo = contenido.slice(0, 40).replace(/\s+/g, "_")
 
     const DescargarDoc = (tipo: Tipo) => {
-        if (tipo === "txt") {
-            //forma de guardar datos en 
-            const blob = new Blob([contenido], { type: "text/plain;charset=utf-8" })
-            saveAs(blob,`${titulo}.txt`)
+        // if (tipo === "txt") {
+        //     //forma de guardar datos en 
+        //     const blob = new Blob([contenido], { type: "text/plain;charset=utf-8" })
+        //     saveAs(blob,`${titulo}.txt`)
+        // }
+
+
+        switch (tipo) {
+            case "txt":
+                const blob = new Blob([contenido], { type: "text/plain;charset=utf-8" })
+                saveAs(blob, `${titulo}.txt`)
+                break;
+            case "pdf":
+                generarPdf(contenido, titulo)
+                break;
+            case "txt":
+
+                break;
+            // case "txt":
+
+            //     break;
+
+
         }
+        setAbierto(false)
     }
 
     return (
@@ -34,6 +55,7 @@ export default function MenuDescargaMensajes({ contenido }: PropMenuDescarga) {
             {abierto && (
                 <div className="absolute mt-1 bg-zinc-800  rounded shadow p-2 flex gap-2 z-50 min-w-[250px]">
                     <button
+                        onClick={() => DescargarDoc("pdf")}
                         className="bg-zinc-700 px-3 py-1 rounded hover:bg-zinc-600 text-sm"
                     >
                         PDF
@@ -44,7 +66,7 @@ export default function MenuDescargaMensajes({ contenido }: PropMenuDescarga) {
                         WORD
                     </button>
                     <button
-                    onClick={()=>DescargarDoc("txt")}
+                        onClick={() => DescargarDoc("txt")}
                         className="bg-zinc-700 px-3 py-1 rounded hover:bg-zinc-600 text-sm"
                     >
                         TXT
