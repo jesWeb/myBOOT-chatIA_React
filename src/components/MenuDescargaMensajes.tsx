@@ -1,8 +1,26 @@
 import React, { useState } from 'react'
+import type { Tipo } from '../types/documento'
+import {saveAs} from 'file-saver'
 
-export default function MenuDescargaMensajes() {
+type PropMenuDescarga = {
+    contenido: string
+}
+
+
+
+export default function MenuDescargaMensajes({ contenido }: PropMenuDescarga) {
 
     const [abierto, setAbierto] = useState(false)
+
+    const titulo = contenido.slice(0,40).replace(/\s+/g, "_")
+
+    const DescargarDoc = (tipo: Tipo) => {
+        if (tipo === "txt") {
+            //forma de guardar datos en 
+            const blob = new Blob([contenido], { type: "text/plain;charset=utf-8" })
+            saveAs(blob,`${titulo}.txt`)
+        }
+    }
 
     return (
         <div className='relative inline-block text-left'>
@@ -26,6 +44,7 @@ export default function MenuDescargaMensajes() {
                         WORD
                     </button>
                     <button
+                    onClick={()=>DescargarDoc("txt")}
                         className="bg-zinc-700 px-3 py-1 rounded hover:bg-zinc-600 text-sm"
                     >
                         TXT

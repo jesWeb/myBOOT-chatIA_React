@@ -131,7 +131,7 @@ const MainVentanaChat = () => {
                                 {mensa.texto}
                                 {mensa.rol === "bot" && (
                                     <div className="mt-2">
-                                        <MenuDescargaMensajes />
+                                        <MenuDescargaMensajes contenido={mensa.texto}/>
                                     </div>
                                 )}
                             </div>
