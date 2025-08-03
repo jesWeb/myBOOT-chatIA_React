@@ -7,6 +7,7 @@ import { consultorIA } from "../lib/consultarIA";
 import AdjuntarArchivo from "./AdjuntarArchivo";
 import { LIMITE_TEXTO } from "../config/limites";
 import { useLocation, Link } from "react-router-dom";
+import MenuDescargaMensajes from "./MenuDescargaMensajes";
 
 
 
@@ -128,6 +129,11 @@ const MainVentanaChat = () => {
                                 `w-fit max-w-[90%] px-4 py-2 rounded-xl shadow whitespace-pre-wrap
                                  ${mensa.rol === "usuario" ? "bg-zinc-500 self-end" : "bg-zinc-700  self-start"}`}>
                                 {mensa.texto}
+                                {mensa.rol === "bot" && (
+                                    <div className="mt-2">
+                                        <MenuDescargaMensajes />
+                                    </div>
+                                )}
                             </div>
 
                         </div>
