@@ -1,1 +1,1 @@
-export const LIMITE_TEXTO = 2000
+export const LIMITE_TEXTO = 5000

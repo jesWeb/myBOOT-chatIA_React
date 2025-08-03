@@ -10,6 +10,7 @@ import { useState } from "react"
 import { LIMITE_TEXTO } from "../config/limites"
 import { leerDocs } from "../utils/leerDocs"
 import { leerPdf } from "../utils/Leerpdf"
+import { leerXlsx } from "../utils/leerXlsx"
 
 const EXTENSIONES_MIME_VALIDAS = [
     "application/pdf",
@@ -33,7 +34,7 @@ type PropAjuntarArchivo = {
 export default function AdjuntarArchivo({ envioTextoExtraido }: PropAjuntarArchivo) {
 
     const [Texto, setTexto] = useState("")
-    const lecturaSize = 5000;
+    // const lecturaSize = 5000;
     const EXTEN_VALIDAS = ["pdf", "docx", "txt", "xlsx"]
     //evento de archivo
     const manejarArchivo = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,8 +54,8 @@ export default function AdjuntarArchivo({ envioTextoExtraido }: PropAjuntarArchi
             return
         }
 
-        if (archivo.size > LIMITE_TEXTO) {
-            alert("El archivoo excede el tamano maximo permitido")
+        if (archivo.size < LIMITE_TEXTO) {
+            alert("El archivo excede el tamano maximo permitido")
             return
         }
 
@@ -86,14 +87,21 @@ export default function AdjuntarArchivo({ envioTextoExtraido }: PropAjuntarArchi
         }
 
         //pdf 
-
         if (extension === "pdf") {
             const resultado = await leerPdf(archivo)
             setTexto(resultado)
             return
         }
 
-
+        //xlx
+        if (extension === "xlsx") {
+            const lector = new FileReader()
+            lector.onload = async () => {
+                const resultado = await leerXlsx(archivo)
+                setTexto(resultado)
+            }
+            lector.readAsArrayBuffer(archivo)
+        }
 
 
 
