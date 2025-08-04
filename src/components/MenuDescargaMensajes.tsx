@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import type { Tipo } from '../types/documento'
 import { saveAs } from 'file-saver'
 import { generarPdf } from '../utils/generarPdf'
+import { generarWord } from '../utils/generarWords'
 
 type PropMenuDescarga = {
     contenido: string
@@ -21,8 +22,6 @@ export default function MenuDescargaMensajes({ contenido }: PropMenuDescarga) {
         //     const blob = new Blob([contenido], { type: "text/plain;charset=utf-8" })
         //     saveAs(blob,`${titulo}.txt`)
         // }
-
-
         switch (tipo) {
             case "txt":
                 const blob = new Blob([contenido], { type: "text/plain;charset=utf-8" })
@@ -31,8 +30,8 @@ export default function MenuDescargaMensajes({ contenido }: PropMenuDescarga) {
             case "pdf":
                 generarPdf(contenido, titulo)
                 break;
-            case "txt":
-
+            case "word":
+                generarWord(contenido, titulo)
                 break;
             // case "txt":
 
@@ -61,6 +60,7 @@ export default function MenuDescargaMensajes({ contenido }: PropMenuDescarga) {
                         PDF
                     </button>
                     <button
+                        onClick={() => DescargarDoc("word")}
                         className="bg-zinc-700 px-3 py-1 rounded hover:bg-zinc-600 text-sm"
                     >
                         WORD
