@@ -3,6 +3,7 @@ import type { Tipo } from '../types/documento'
 import { saveAs } from 'file-saver'
 import { generarPdf } from '../utils/generarPdf'
 import { generarWord } from '../utils/generarWords'
+import { exportarExcel } from '../utils/generarXlsx'
 
 type PropMenuDescarga = {
     contenido: string
@@ -33,11 +34,9 @@ export default function MenuDescargaMensajes({ contenido }: PropMenuDescarga) {
             case "word":
                 generarWord(contenido, titulo)
                 break;
-            // case "txt":
-
-            //     break;
-
-
+            case "xlsx":
+                exportarExcel(contenido, titulo)
+                break;
         }
         setAbierto(false)
     }
@@ -72,6 +71,7 @@ export default function MenuDescargaMensajes({ contenido }: PropMenuDescarga) {
                         TXT
                     </button>
                     <button
+                        onClick={() => DescargarDoc("xlsx")}
                         className="bg-zinc-700 px-3 py-1 rounded hover:bg-zinc-600 text-sm"
                     >
                         EXCEL
