@@ -38,6 +38,9 @@ export default function MenuDescargaMensajes({ contenido }: PropMenuDescarga) {
                 exportarExcel(contenido, titulo)
                 break;
         }
+
+        guardarDocumento(tipo,contenido)
+        // guardar
         setAbierto(false)
     }
 
@@ -84,3 +87,7 @@ export default function MenuDescargaMensajes({ contenido }: PropMenuDescarga) {
         </div>
     )
 }
+function guardarDocumento(tipo: string, contenido: string) {
+    throw new Error('Function not implemented.')
+}
+
